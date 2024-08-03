@@ -8,6 +8,7 @@ export default function ToothFairyRatesForm() {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10); // Number of items per page
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetch('/api/rates')
@@ -28,17 +29,28 @@ export default function ToothFairyRatesForm() {
         setRate('');
     };
 
+    // Filter data based on search query
+    const filteredData = data.filter((entry) =>
+        entry.location.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     // Calculate the indexes for the items to be displayed on the current page
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
     // Calculate the total number of pages
-    const totalPages = Math.ceil(data.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-    const handleClick = (event, pageNumber) => {
+    const handlePageClick = (event, pageNumber) => {
         event.preventDefault();
         setCurrentPage(pageNumber);
+    };
+
+    // Handle search input change
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+        setCurrentPage(1); // Reset to first page on search
     };
 
     return (
@@ -63,6 +75,14 @@ export default function ToothFairyRatesForm() {
                 </button>
             </form>
 
+            <input
+                type="text"
+                placeholder="Search by Location"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="block w-full mb-8 max-w-md mx-auto p-2 border rounded"
+            />
+
             <table className="w-full max-w-md mx-auto border-collapse">
                 <thead>
                     <tr>
@@ -86,7 +106,7 @@ export default function ToothFairyRatesForm() {
                 {Array.from({ length: totalPages }, (_, index) => (
                     <button
                         key={index + 1}
-                        onClick={(e) => handleClick(e, index + 1)}
+                        onClick={(e) => handlePageClick(e, index + 1)}
                         className={`px-3 py-1 mx-1 ${currentPage === index + 1
                                 ? 'bg-blue-500 text-white'
                                 : 'bg-gray-300 text-gray-700'
