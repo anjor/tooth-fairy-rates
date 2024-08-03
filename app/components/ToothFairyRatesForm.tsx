@@ -12,7 +12,7 @@ interface RateData {
 export default function ToothFairyRatesForm() {
     const [location, setLocation] = useState('');
     const [rate, setRate] = useState('');
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<RateData[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10); // Number of items per page
     const [searchQuery, setSearchQuery] = useState('');
