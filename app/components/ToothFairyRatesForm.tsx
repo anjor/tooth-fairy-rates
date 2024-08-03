@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
 export default function ToothFairyRatesForm() {
     const [location, setLocation] = useState('');
     const [rate, setRate] = useState('');
@@ -16,7 +15,7 @@ export default function ToothFairyRatesForm() {
             .then((data) => setData(data));
     }, []);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const response = await fetch('/api/rates', {
             method: 'POST',
@@ -42,13 +41,13 @@ export default function ToothFairyRatesForm() {
     // Calculate the total number of pages
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-    const handlePageClick = (event, pageNumber) => {
+    const handlePageClick = (event: React.MouseEvent<HTMLButtonElement>, pageNumber: number) => {
         event.preventDefault();
         setCurrentPage(pageNumber);
     };
 
     // Handle search input change
-    const handleSearchChange = (e) => {
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
         setCurrentPage(1); // Reset to first page on search
     };
@@ -108,8 +107,8 @@ export default function ToothFairyRatesForm() {
                         key={index + 1}
                         onClick={(e) => handlePageClick(e, index + 1)}
                         className={`px-3 py-1 mx-1 ${currentPage === index + 1
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-300 text-gray-700'
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-300 text-gray-700'
                             } rounded`}
                     >
                         {index + 1}
