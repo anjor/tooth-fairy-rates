@@ -1,6 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+
+interface RateData {
+    id: number;
+    location: string;
+    rate: string;
+    created_at: string;
+}
+
 export default function ToothFairyRatesForm() {
     const [location, setLocation] = useState('');
     const [rate, setRate] = useState('');
@@ -22,7 +30,7 @@ export default function ToothFairyRatesForm() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ location, rate }),
         });
-        const newData = await response.json();
+        const newData: RateData = await response.json();
         setData([newData, ...data]);
         setLocation('');
         setRate('');
